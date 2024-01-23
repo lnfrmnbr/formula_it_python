@@ -1,17 +1,14 @@
-from typing import List
-
-
 class Book:
-    def __init__(self, id: int, name: str, pages: int):
-        if not isinstance(id, int):
+    def __init__(self, id_: int, name: str, pages: int):
+        if not isinstance(id_, int):
             raise TypeError("идентификатор книги должен быть типа int")
         if not isinstance(name, str):
             raise TypeError("название книги должно быть str")
-        if not isinstance(id, int):
+        if not isinstance(id_, int):
             raise TypeError("количество страниц должно быть int")
         if pages <= 0:
             raise ValueError("количество страниц должно быть положительным числом")
-        self.id = id
+        self.id_ = id_
         self.name = name
         self.pages = pages
 
@@ -19,24 +16,26 @@ class Book:
         return f'Книга "{self.name}"'
 
     def __repr__(self):
-        return f'Book(id={self.id}, name=\'{self.name}\', pages={self.pages})'
+        return f'Book(id={self.id_}, name=\'{self.name}\', pages={self.pages})'
 
 
 class Library:
-    def __init__(self, books: List = []):
-        self.books = books
+    def __init__(self, books_=None):
+        if books_ is None:
+            books_ = []
+        self.books = books_
 
     def get_next_book_id(self) -> int:
         ls = self.books
-        if len(ls) == 0:
+        if not self.books:
             return 1
         else:
-            return ls[len(ls)-1].id + 1
+            return ls[len(ls)-1].id_ + 1
 
     def get_index_by_book_id(self, b: Book) -> int:
         ls = self.books
         for item in enumerate(ls):
-            if item[1].id == b.id:
+            if item[1].id_ == b.id_:
                 return item[0]
         else:
             raise ValueError("книги с запрашиваемым id не существует")
@@ -64,11 +63,7 @@ books = [
     }
 ]
 
-list_books = [Book(id=book["id"], name=book["name"], pages=book["pages"]) for book in books]
+list_books = [Book(id_=book["id"], name=book["name"], pages=book["pages"]) for book in books]
 library = Library(list_books)
 print(library.get_next_book_id())
 print(library.get_index_by_book_id(c))
-
-
-
-
